@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { NavLink } from 'react-router-dom';
 import ModalComponent from './ModalComponent.jsx';
 import useDocumentTitle from './useDocumentTitle.js';
@@ -7,7 +7,6 @@ import departments from '../assets/departments.json'; // Import the JSON file fo
 import CustomSelect from './CustomSelect.tsx';
 import '../styles/CreateEmployee.scss';
 
-// You can extend this interface if you have more fields
 interface EmployeeFormData {
   firstName: string;
   lastName: string;
