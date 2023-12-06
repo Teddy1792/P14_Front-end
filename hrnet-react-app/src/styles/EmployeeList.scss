@@ -1,0 +1,139 @@
+.tablePage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .showButton {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        select {
+            padding: 4px;
+            margin: 4px;
+            height: 25px;
+        }
+    }
+
+    .tableWithLegend{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .tableFeatures{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            .searchBar{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                input{
+                    margin-left: 5px;
+                    height: 18px;
+                }
+            }
+        }
+
+        table {
+            border-collapse: collapse;
+
+            thead {
+                th {
+                    background-color: white;
+                    padding: 8px;
+                    border: none;
+                    border-bottom: 1px solid black;
+
+                    .header-content {
+                        display: flex;
+                        flex-direction: row;
+                        align-self: center;
+                        justify-content: center;
+                        width: 120px;
+
+                        .arrows{
+                            display: flex;
+                            flex-direction: column;
+                            margin-left: 5px;
+
+                            .sorted-asc{
+                                .svg-inline--fa  {
+                                    color: grey;
+                                }
+                            } 
+
+                            .sorted-desc{
+                                .svg-inline--fa  {
+                                    color: grey;
+                                }
+                            } 
+
+                            span{
+                                height: 5px;
+                            }
+                    }
+                    }
+                }
+            }
+
+            tbody {
+                tr {
+                    border-left: none;
+                    border-right: none;
+                    border-bottom: 1px solid #dddddd;
+                    &:last-child{
+                        border-bottom: 1px solid black;
+                    }
+
+                    &:nth-child(odd) {
+                        background-color: #f9f9f9;
+                    }
+
+                    &:nth-child(even) {
+                        background-color: #ffffff;
+                    }
+                }
+
+                td {
+                    border: none;
+                    padding: 8px;
+                }
+            }
+        }
+
+        .pagination{
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+
+            .entriesInfo{
+                
+            }
+
+            .paginationNav{
+                display: flex;
+                flex-direction: row;
+                button{
+                    background: none;
+                    border: none;
+                    outline: none; 
+                    text-decoration: none;
+                    padding: 0;  
+                    margin: 0;
+                    font-family: inherit;
+                    font-size: inherit;
+                    margin: 16px;
+                }
+            }
+        }
+
+        .NavLink{
+            text-align: center; //Why is it talking up the whole width of its container?
+        }
+    }
+}

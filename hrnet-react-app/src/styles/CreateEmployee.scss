@@ -1,0 +1,58 @@
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#create-employee{
+    margin-left: -71px;
+}
+
+.departmentSelect{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+
+    button{
+        width: 50px;
+        margin: 10px;
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+select{
+    width: 250px;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    background: #f6f6f6;
+    font-weight: normal;
+    font-size: 16px;
+    color: #2b2b2b;
+    padding: 10px;
+    padding-left: 15px;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &:hover{
+    background: #ededed;
+    font-weight: normal;
+    color: #2b2b2b;
+    }
+}
+
+label {
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 10px;
+}
+
+.address {
+    margin-top: 10px;
+}
