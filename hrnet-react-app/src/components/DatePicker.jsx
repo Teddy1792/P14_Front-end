@@ -57,7 +57,14 @@ const DatePicker = () => {
       value: displayedDate.getFullYear(),
       label: `${displayedDate.getFullYear()}`,
     };
-  
+
+// Helper function to format the date
+const formatDate = (date) => {
+  const day = date.getDate().toString().padStart(2, '0'); // Add leading zero if needed
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if needed
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
 
   const generateCalendar = () => {
     const days = daysInMonth();
@@ -78,27 +85,37 @@ const DatePicker = () => {
         </td>
       );
     }
+//get current day
+const currentDate = new Date();
 
     for (let day = 1; day <= days; day++) {
-      currentRow.push(
-        <td
-          key={day}
-          onClick={() => {
-            const selected = new Date(displayedDate.getFullYear(), displayedDate.getMonth(), day);
-            setSelectedDate(selected);
-            setIsDatePickerOpen(false);
-          }}
-          className={selectedDate && day === selectedDate.getDate() ? 'selected' : ''}
-        >
-          {day}
-        </td>
-      );
+  const isCurrentDay =
+    displayedDate.getFullYear() === currentDate.getFullYear() &&
+    displayedDate.getMonth() === currentDate.getMonth() &&
+    day === currentDate.getDate();
 
-      if (currentRow.length === 7) {
-        rows.push(<tr key={day}>{currentRow}</tr>);
-        currentRow = [];
-      }
-    }
+  currentRow.push(
+    <td
+      key={day}
+      onClick={() => {
+        const selected = new Date(displayedDate.getFullYear(), displayedDate.getMonth(), day);
+        setSelectedDate(selected);
+        setIsDatePickerOpen(false);
+      }}
+      className={`${
+        selectedDate && day === selectedDate.getDate() ? 'selected' : ''
+      } ${isCurrentDay ? 'current-day' : ''}`}
+    >
+      {day}
+    </td>
+  );
+
+  if (currentRow.length === 7) {
+    rows.push(<tr key={day}>{currentRow}</tr>);
+    currentRow = [];
+  }
+}
+
 
   // Add days from the next month to complete the last row if needed
   while (currentRow.length < 7) {
@@ -118,12 +135,12 @@ const DatePicker = () => {
 };
   return (
     <div className="date-picker" ref={datePickerRef}>
-      <input
-        type="text"
-        value={selectedDate ? selectedDate.toDateString() : ''}
-        onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-        readOnly
-      />
+<input
+  type="text"
+  value={selectedDate ? formatDate(selectedDate) : ''}
+  onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+  readOnly
+/>
       {isDatePickerOpen && (
         <div className="date-picker-container">
           <div className="date-picker-header">
@@ -140,22 +157,21 @@ const DatePicker = () => {
               <FontAwesomeIcon icon={faHouse} />
             </button>
             <CustomSelect
-  style={customStyles}
-  items={Array.from({ length: 12 }, (_, index) => ({
-    value: index,
-    label: new Date(displayedDate.getFullYear(), index, 1).toLocaleString('default', { month: 'long' }),
-  }))}
-  initialDefaultValue={initialMonth.label} // Set the initial month value
-/>
-<CustomSelect
-  style={customStyles}
-  items={Array.from({ length: 101 }, (_, index) => ({
-    value: 1930 + index,
-    label: `${1930 + index}`,
-  }))}
-  initialDefaultValue={initialYear.label} // Set the initial year value
-/>
-
+              style={customStyles}
+              items={Array.from({ length: 12 }, (_, index) => ({
+                value: index,
+                label: new Date(displayedDate.getFullYear(), index, 1).toLocaleString('default', { month: 'long' }),
+              }))}
+              initialDefaultValue={initialMonth.label} // Set the initial month value
+            />
+            <CustomSelect
+              style={customStyles}
+              items={Array.from({ length: 101 }, (_, index) => ({
+                value: 1930 + index,
+                label: `${1930 + index}`,
+              }))}
+              initialDefaultValue={initialYear.label} // Set the initial year value
+            />
             <button type="button" onClick={() => setDisplayedDate(new Date(displayedDate.getFullYear(), displayedDate.getMonth() + 1, 1))}>
             <FontAwesomeIcon icon={faCaretRight} />
             </button>
