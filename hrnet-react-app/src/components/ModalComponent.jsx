@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import '../styles/Modal.scss';
 
-const ModalComponent = ({ isOpen, closeModal }) => {
+const ModalComponent = ({ isModalOpen, closeModal }) => {
   return (
     <ReactModal
-      isOpen={isOpen}
+    isOpen={isModalOpen}
       onRequestClose={closeModal}
       contentLabel="Modal Title"
       style={{
