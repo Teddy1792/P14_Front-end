@@ -5,37 +5,28 @@
         background-color: white;
         border: solid 1px black;
         z-index: 10;
+        min-width: 276px;
 
         .date-picker-header{
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-    
-            select{
-                appearance: none; /* Remove default dropdown arrow (not supported in all browsers) */
-                border: none; /* Remove border */
-                background-color: transparent; /* Set background to transparent */
-                padding: 0; /* Remove padding */
-                margin: 0; /* Remove margin */
-                font-family: inherit; /* Use the parent font */
-                font-size: inherit; /* Use the parent font size */
-                color: inherit; /* Use the parent text color */
-                outline: none; /* Remove focus outline */
-                width: 70px;
-            }
         }
     
         button{
             cursor: pointer;
-            appearance: none; /* Remove default dropdown arrow (not supported in all browsers) */
-            border: none; /* Remove border */
-            background-color: transparent; /* Set background to transparent */
-            padding: 0; /* Remove padding */
-            margin: 0; /* Remove margin */
-            font-family: inherit; /* Use the parent font */
-            font-size: inherit; /* Use the parent font size */
-            color: inherit; /* Use the parent text color */
-            outline: none; /* Remove focus outline */
+            appearance: none;
+            border: none;
+            background-color: transparent;
+            padding: 0;
+            margin: 5px;
+            font-family: inherit;
+            font-size: inherit;
+            color: grey;
+            outline: none;
+            &:hover{
+                color: black;
+            }
         }
 
         .custom-select{
@@ -54,10 +45,22 @@
         border-collapse: collapse; /* Collapse borders to create grid lines */
         width: 100%;
         padding: 2px;
+
+        .inactive{
+            cursor: default;
+            &:hover{
+                background-color: rgb(240, 240, 240);
+            }
+        }
         td{
             border: 1px solid #ccc; /* Add a thin grey border to each cell */
             padding: 8px; /* Add padding for better spacing */
             text-align: center; /* Center align text within cells */
+            cursor: pointer;
+
+            &:hover{
+                background-color: rgb(182, 208, 249);
+            }
         }
 
         .inactive{
@@ -66,4 +69,5 @@
 
     }
 }
+  
 
