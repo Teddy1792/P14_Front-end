@@ -1,58 +1,78 @@
-.title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#create-employee{
-    margin-left: -71px;
-}
-
-.departmentSelect{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-
-    button{
-        width: 50px;
-        margin: 10px;
-    }
-}
-
 .container {
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-}
+    width: 50%;
+    margin: auto;
 
-select{
-    width: 250px;
-    padding: 10px;
-    border: 1px solid #cccccc;
-    background: #f6f6f6;
-    font-weight: normal;
-    font-size: 16px;
-    color: #2b2b2b;
-    padding: 10px;
-    padding-left: 15px;
-    border-radius: 3px;
-    cursor: pointer;
+    .title {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        margin: auto;
 
-    &:hover{
-    background: #ededed;
-    font-weight: normal;
-    color: #2b2b2b;
+        h2{
+            text-align: center;
+        }
     }
-}
-
-label {
-    display: block;
-    margin-top: 1rem;
-    margin-bottom: 10px;
-}
-
-.address {
-    margin-top: 10px;
+    
+    #create-employee{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border: solid 1px rgb(176, 176, 176);
+        padding: 10px;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.3);
+    
+        .completeForm{
+            display: flex;
+            flex-direction: row;
+        }
+    
+        .employeePersonalInfo{
+            width: 100%;
+            padding: 5px;
+        }
+    
+        .employeeAdress{
+            width: 100%;
+            padding: 5px;
+    
+            .address{
+                height: 92.5%;
+                border: solid 1px rgb(176, 176, 176);
+                background-color: rgba(255, 255, 255, 0.335);
+                border-radius: 10px;
+            }
+        }
+    
+        .buttonContainer{
+            display:flex;
+            justify-content: center;
+            
+            button{
+                width: 70px;
+                margin: 10px;
+                padding: 5px;
+                border-radius: 10px;
+            }
+        }
+    }
+    
+    label {
+        display: block;
+        margin-top: 1rem;
+        margin-bottom: 10px;
+    }
+    
+    .address {
+        margin-top: 10px;
+    }
+    
+    .errorMessage{
+        color: rgb(252, 252, 252);
+        font-size: 13px;
+    }
 }

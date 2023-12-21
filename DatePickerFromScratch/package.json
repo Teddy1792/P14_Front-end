@@ -1,0 +1,32 @@
+{
+  "name": "datepickerfromscratch",
+  "version": "1.0.0",
+  "description": "a custom date picker for React and TypeScript",
+  "main": "DatePicker.tsx",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "date picker",
+    "calendar",
+    "input",
+    "form",
+    "component",
+    "accessibility",
+    "TypeScript",
+    "UI",
+    "picker"
+  ],
+  "author": "Theodore Abitbol",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0",
+    "sass": "^1.69.5",
+    "@fortawesome/fontawesome-free": "^6.5.0",
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "typescript": "^5.2.2"
+  }
+}

@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Select from 'react-select';
 import '../styles/CustomSelect.scss';
 
 interface CustomSelectProps {
-  items: { value: string; label: string }[];
-  style?: object; // Add a style prop to accept custom styles
+  items: { value: string | number; label: string }[];
+  style?: object;
   initialDefaultValue?: string;
+  onChange?: (selectedOption: { value: string | number; label: string } | null) => void; // Pass null for clearing the selection
+  value?: { value: string | number; label: string } | null; // Allow null for clearing the selection
 }
 
-const CustomSelect: React.FC<CustomSelectProps> = ({ items, style, initialDefaultValue }) => {
+const CustomSelect: React.FC<CustomSelectProps> = ({ items, style, initialDefaultValue, onChange, value }) => {
   const [defaultValue, setDefaultValue] = useState(initialDefaultValue || null);
 
   useEffect(() => {
-    // Update the default value when the prop changes
     setDefaultValue(initialDefaultValue || null);
   }, [initialDefaultValue]);
 
-  // Merge the provided styles with customStyles if style prop is provided
+  // Custom styles for the select component
   const customStyles = style
     ? {
         indicatorSeparator: (provided) => ({
@@ -27,16 +28,22 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ items, style, initialDefaul
           ...provided,
           border: 'none',
           boxShadow: 'none',
-          Width: '140px',
+          width: '140px', // 'Width' should be lowercase 'width'
         }),
         menu: (provided) => ({
           ...provided,
           maxHeight: '220px',
           overflowY: 'auto',
         }),
-        ...style, // Merge the provided styles
+        ...style,
       }
     : {};
+
+  // Handle selection change
+  const handleChange = (selectedOption) => {
+    console.log(selectedOption);
+    onChange(selectedOption);
+  };
 
   return (
     <div>
@@ -44,7 +51,8 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ items, style, initialDefaul
         className="custom-select"
         options={items}
         styles={customStyles}
-        defaultValue={items.find((item) => item.label === defaultValue)}
+        value={items.find((item) => item.value === (value ? value.value : defaultValue))}
+        onChange={handleChange}
       />
     </div>
   );

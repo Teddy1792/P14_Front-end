@@ -1,0 +1,32 @@
+nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 50%;
+    align-items: center;
+    margin: auto;
+
+    .logo{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .HRnet{
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            .HR{
+                font-family: "Posterama 1984 W04 Black";
+            }
+            .net{
+                font-size: 17px;
+            }
+        }
+
+        img{
+            width: 150px;
+        }
+    }
+
+
+}

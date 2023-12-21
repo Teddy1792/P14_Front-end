@@ -11,7 +11,7 @@
         select {
             padding: 4px;
             margin: 4px;
-            height: 25px;
+            height: 30px;
         }
     }
 
@@ -42,10 +42,10 @@
 
             thead {
                 th {
-                    background-color: white;
+                    background-color: rgba(255, 255, 255, 0.80);
                     padding: 8px;
                     border: none;
-                    border-bottom: 1px solid black;
+                    border-bottom: 1px solid rgb(176, 176, 176);
 
                     .header-content {
                         display: flex;
@@ -85,15 +85,15 @@
                     border-right: none;
                     border-bottom: 1px solid #dddddd;
                     &:last-child{
-                        border-bottom: 1px solid black;
+                        border-bottom: 1px solid rgb(176, 176, 176);
                     }
 
                     &:nth-child(odd) {
-                        background-color: #f9f9f9;
+                        background-color: rgba(249,249,249, 0.50);
                     }
 
                     &:nth-child(even) {
-                        background-color: #ffffff;
+                        background-color: rgba(255,255,255, 0.2);
                     }
                 }
 

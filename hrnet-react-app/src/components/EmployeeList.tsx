@@ -1,19 +1,23 @@
 import React, { useState, useMemo } from 'react';
 import { useTable, usePagination, useSortBy } from 'react-table';
 import { NavLink } from 'react-router-dom';
-import mockedEmployees from '../assets/mockedEmployees';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { store } from '../redux/store.js';
+import { useSelector } from 'react-redux';
 import "../styles/EmployeeList.scss";
 
 const EmployeeList = () => {
+    //access the store
+    const employees = useSelector(state => state.employees.employees);
+
     const [pageSize, setPageSize] = useState(10);
     const [searchInput, setSearchInput] = useState('');
 
     const filteredEmployees = useMemo(() => {
-        if (!searchInput) return mockedEmployees;
+        if (!searchInput) return employees;
 
-        return mockedEmployees.filter(employee => {
+        return employees.filter(employee => {
             const fullName = `${employee.firstName} ${employee.lastName}`.toLowerCase();
             const searchLower = searchInput.toLowerCase();
             return (
@@ -26,7 +30,7 @@ const EmployeeList = () => {
                 employee.department.toLowerCase().includes(searchLower)
             );
         });
-    }, [searchInput, mockedEmployees]);
+    }, [searchInput, employees]);
 
     const columns = React.useMemo(
         () => [
@@ -77,7 +81,7 @@ const EmployeeList = () => {
 
     return (
         <div className="tablePage">
-            <h1>Current Employees</h1>
+            <h2>Current Employees</h2>
 
             <div className="tableWithLegend">
                 <div className="tableFeatures">
@@ -158,7 +162,6 @@ const EmployeeList = () => {
                         </button>
                     </div>
                 </div>
-                <NavLink className="NavLink" to="/">Home</NavLink>
             </div>
         </div>
     );
