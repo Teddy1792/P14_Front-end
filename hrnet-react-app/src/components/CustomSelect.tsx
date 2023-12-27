@@ -1,48 +1,50 @@
-import { useEffect, useState } from 'react';
-import Select from 'react-select';
-import '../styles/CustomSelect.scss';
+import React, { useEffect, useState } from 'react';
+import Select, { StylesConfig, ActionMeta } from 'react-select';
+
+interface OptionType {
+  value: string | number;
+  label: string;
+}
 
 interface CustomSelectProps {
-  items: { value: string | number; label: string }[];
+  items: OptionType[];
   style?: object;
   initialDefaultValue?: string;
-  onChange?: (selectedOption: { value: string | number; label: string } | null) => void; // Pass null for clearing the selection
-  value?: { value: string | number; label: string } | null; // Allow null for clearing the selection
+  onChange?: (selectedOption: OptionType | null) => void; // Pass null for clearing the selection
+  value?: OptionType | null; // Allow null for clearing the selection
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({ items, style, initialDefaultValue, onChange, value }) => {
-  const [defaultValue, setDefaultValue] = useState(initialDefaultValue || null);
+  const [defaultValue, setDefaultValue] = useState<OptionType | null>(initialDefaultValue || null);
 
   useEffect(() => {
     setDefaultValue(initialDefaultValue || null);
   }, [initialDefaultValue]);
 
   // Custom styles for the select component
-  const customStyles = style
-    ? {
-        indicatorSeparator: (provided) => ({
-          ...provided,
-          display: 'none',
-        }),
-        control: (provided) => ({
-          ...provided,
-          border: 'none',
-          boxShadow: 'none',
-          width: '140px', // 'Width' should be lowercase 'width'
-        }),
-        menu: (provided) => ({
-          ...provided,
-          maxHeight: '220px',
-          overflowY: 'auto',
-        }),
-        ...style,
-      }
-    : {};
+  const customStyles: StylesConfig<OptionType, false> = {
+    indicatorSeparator: (provided) => ({
+      ...provided,
+      display: 'none',
+    }),
+    control: (provided) => ({
+      ...provided,
+      border: 'none',
+      boxShadow: 'none',
+      width: '189px',
+    }),
+    menu: (provided) => ({
+      ...provided,
+      maxHeight: '220px',
+      overflowY: 'auto',
+    }),
+    ...style,
+  };
 
   // Handle selection change
-  const handleChange = (selectedOption) => {
+  const handleChange = (selectedOption: OptionType | null, actionMeta: ActionMeta<OptionType>) => {
     console.log(selectedOption);
-    onChange(selectedOption);
+    onChange?.(selectedOption);
   };
 
   return (

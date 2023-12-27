@@ -49,16 +49,26 @@ const CreateEmployee = () => {
 
   // Handle input change
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { id, value } = e.target;
+  
+    let error = '';
+    if (id === 'zipCode') {
+      if (!/^\d{5}$/.test(value)) {
+        error = 'Zip Code must contain exactly 5 digits!';
+      }
+    }
+  
     setInputErrors((prevErrors) => ({
       ...prevErrors,
-      [e.target.id]: '',
+      [id]: error,
     }));
   
     setFormData({
       ...formData,
-      [e.target.id]: e.target.value,
+      [id]: value,
     });
   };
+  
 
   // Handle department change
   const handleDepartmentChange = (selectedValue) => {

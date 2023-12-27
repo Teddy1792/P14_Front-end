@@ -14,8 +14,13 @@ interface DatePickerProps {
 const DatePicker: React.FC<DatePickerProps> = ({ id, selectedDate, onChange, onFormInputChange }) => {
   const datePickerRef = useRef(null);
 
+  console.log("id:", typeof id);
+  console.log("selectedDate:", typeof selectedDate);
+  console.log("onChange:", typeof onChange);
+  console.log("onFormInputChange:", typeof onFormInputChange);
+
   useEffect(() => {
-    const handleOutsideClick = (event) => {
+    const handleOutsideClick = (event: MouseEvent) => {
       if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
         setIsDatePickerOpen(false);
         handleDatePickerClose();
@@ -123,7 +128,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ id, selectedDate, onChange, onF
     return new Date(displayedDate.getFullYear(), displayedDate.getMonth(), 0).getDate();
   };
 
-  const generateCalendar = (handleClose) => {
+  const generateCalendar = (handleClose: () => void) => {
     const days = daysInMonth();
     const firstDay = firstDayOfMonth();
     const lastDayPrevMonth = lastDayOfPrevMonth();
@@ -201,13 +206,13 @@ const DatePicker: React.FC<DatePickerProps> = ({ id, selectedDate, onChange, onF
   };
   
 
-  const handleMonthChange = (selectedMonth) => {
+  const handleMonthChange = (selectedMonth: { value: number; label: string }) => {
     setDisplayedDate((currentDate) => {
       return new Date(currentDate.getFullYear(), selectedMonth.value, 1);
     });
   };
 
-  const handleYearChange = (selectedYear) => {
+  const handleYearChange = (selectedYear: { value: number; label: string }) => {
     setDisplayedDate((currentDate) => new Date(selectedYear.value, currentDate.getMonth(), 1));
   };
 
@@ -237,7 +242,6 @@ const DatePicker: React.FC<DatePickerProps> = ({ id, selectedDate, onChange, onF
               type="button"
               onClick={() => {
                 setDisplayedDate(new Date());
-                handleDatePickerClose(); // Close the date picker when clicking the house icon
               }}
             >
               <FontAwesomeIcon icon={faHouse} />
