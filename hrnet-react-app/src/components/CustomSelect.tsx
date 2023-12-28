@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import Select, { StylesConfig, ActionMeta } from 'react-select';
+import { useEffect, useState } from 'react';
+import Select, { StylesConfig } from 'react-select';
 
 interface OptionType {
   value: string | number;
@@ -7,19 +7,23 @@ interface OptionType {
 }
 
 interface CustomSelectProps {
-  items: OptionType[];
+  items: { value: string | number; label: string }[];
   style?: object;
-  initialDefaultValue?: string;
-  onChange?: (selectedOption: OptionType | null) => void; // Pass null for clearing the selection
-  value?: OptionType | null; // Allow null for clearing the selection
+  initialDefaultValue?: string | number; // Adjusted to string or number
+  onChange?: (selectedOption: { value: string | number; label: string } | null) => void;
+  value?: { value: string | number; label: string } | null;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({ items, style, initialDefaultValue, onChange, value }) => {
-  const [defaultValue, setDefaultValue] = useState<OptionType | null>(initialDefaultValue || null);
+  const findInitialValue = () => {
+    return items.find(item => item.value === initialDefaultValue) || null;
+  };
+
+  const [defaultValue, setDefaultValue] = useState<{ value: string | number; label: string } | null>(findInitialValue());
 
   useEffect(() => {
-    setDefaultValue(initialDefaultValue || null);
-  }, [initialDefaultValue]);
+    setDefaultValue(findInitialValue());
+  }, [initialDefaultValue, items]);
 
   // Custom styles for the select component
   const customStyles: StylesConfig<OptionType, false> = {
@@ -42,7 +46,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ items, style, initialDefaul
   };
 
   // Handle selection change
-  const handleChange = (selectedOption: OptionType | null, actionMeta: ActionMeta<OptionType>) => {
+  const handleChange = (selectedOption: OptionType | null) => {
     console.log(selectedOption);
     onChange?.(selectedOption);
   };

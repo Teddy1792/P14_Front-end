@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretLeft, faCaretRight, faHouse } from '@fortawesome/free-solid-svg-icons';
 import CustomSelect from './CustomSelect';
@@ -12,16 +12,11 @@ interface DatePickerProps {
 }
 
 const DatePicker: React.FC<DatePickerProps> = ({ id, selectedDate, onChange, onFormInputChange }) => {
-  const datePickerRef = useRef(null);
-
-  console.log("id:", typeof id);
-  console.log("selectedDate:", typeof selectedDate);
-  console.log("onChange:", typeof onChange);
-  console.log("onFormInputChange:", typeof onFormInputChange);
+  const datePickerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
-      if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
+      if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
         setIsDatePickerOpen(false);
         handleDatePickerClose();
       }
@@ -204,17 +199,22 @@ const DatePicker: React.FC<DatePickerProps> = ({ id, selectedDate, onChange, onF
     rows.push(<tr key={`row-next`}>{currentRow}</tr>);
     return rows;
   };
-  
 
-  const handleMonthChange = (selectedMonth: { value: number; label: string }) => {
+  const handleMonthChange = (selectedMonth: { value: string | number; label: string } | null) => {
+    if (selectedMonth && !isNaN(Number(selectedMonth.value))) {
+      setDisplayedDate((currentDate) => {
+        return new Date(currentDate.getFullYear(), Number(selectedMonth.value), 1);
+      });
+    }
+  };  
+
+const handleYearChange = (selectedYear: { value: string | number; label: string } | null) => {
+  if (selectedYear && !isNaN(Number(selectedYear.value))) {
     setDisplayedDate((currentDate) => {
-      return new Date(currentDate.getFullYear(), selectedMonth.value, 1);
+      return new Date(Number(selectedYear.value), currentDate.getMonth(), 1);
     });
-  };
-
-  const handleYearChange = (selectedYear: { value: number; label: string }) => {
-    setDisplayedDate((currentDate) => new Date(selectedYear.value, currentDate.getMonth(), 1));
-  };
+  }
+};
 
   return (
     <div className="date-picker" ref={datePickerRef}>
@@ -247,7 +247,6 @@ const DatePicker: React.FC<DatePickerProps> = ({ id, selectedDate, onChange, onF
               <FontAwesomeIcon icon={faHouse} />
             </button>
             <CustomSelect
-              style={true}
               items={Array.from({ length: 12 }, (_, index) => ({
                 value: index,
                 label: new Date(displayedDate.getFullYear(), index, 1).toLocaleString('default', { month: 'long' }),
@@ -256,7 +255,6 @@ const DatePicker: React.FC<DatePickerProps> = ({ id, selectedDate, onChange, onF
               onChange={handleMonthChange}
             />
             <CustomSelect
-              style={true}
               items={Array.from({ length: 101 }, (_, index) => ({
                 value: 1930 + index,
                 label: `${1930 + index}`,
