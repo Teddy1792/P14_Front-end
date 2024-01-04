@@ -35,7 +35,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ items, style, initialDefaul
       ...provided,
       border: 'none',
       boxShadow: 'none',
-      width: '189px',
+      width: '110px',
     }),
     menu: (provided) => ({
       ...provided,
