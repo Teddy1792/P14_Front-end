@@ -1,5 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent, FocusEvent } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useState, useEffect, ChangeEvent, FormEvent, FocusEvent } from 'react';
 import ModalComponent from './ModalComponent.jsx';
 import useDocumentTitle from './useDocumentTitle.js';
 import states from '../assets/states.json';
@@ -8,6 +7,7 @@ import CustomSelect from './CustomSelect.js';
 import DatePicker from './DatePicker.jsx';
 import { useDispatch } from 'react-redux';
 import { addEmployee } from '../redux/employeesSlice';
+import { Employee } from '../redux/employeesSlice';
 import '../styles/CreateEmployee.scss';
 
 interface EmployeeFormData {
@@ -71,18 +71,10 @@ const CreateEmployee = () => {
   
 
   // Handle department change
-  const handleDepartmentChange = (selectedValue) => {
+  const handleDepartmentChange = (selectedValue: { value: string; label: string }) => {
     setFormData({
       ...formData,
-      department: selectedValue.value, // Update department field
-    });
-  };
-
-  // Handle state change
-  const handleStateChange = (selectedValue) => {
-    setFormData({
-      ...formData,
-      state: selectedValue.value, // Update state field
+      department: selectedValue.value,
     });
   };
 
@@ -135,9 +127,13 @@ const CreateEmployee = () => {
     // Calculate areRequiredFieldsFilled inside the useEffect
     const areRequiredFieldsFilled = requiredFields.every((field) => {
       if (field === 'dateOfBirth' || field === 'startDate') {
-        return !!formData[field];
+        return !!formData[field as keyof EmployeeFormData];
       } else {
-        return formData[field].trim() !== '' && !inputErrors[field];
+        const fieldValue = formData[field as keyof EmployeeFormData];
+        return (
+          (typeof fieldValue === 'string' && fieldValue.trim() !== '') ||
+          (fieldValue !== null && fieldValue !== undefined && !inputErrors[field])
+        );
       }
     });
   
@@ -149,18 +145,39 @@ const CreateEmployee = () => {
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-  // Convert dateOfBirth and startDate to "YYYY-MM-DD" format
-  const formDataWithSerializedDates = {
-    ...formData,
-    dateOfBirth: formData.dateOfBirth
-      ? formData.dateOfBirth.toISOString().split('T')[0]
-      : null,
-    startDate: formData.startDate
-      ? formData.startDate.toISOString().split('T')[0]
-      : null,
-  };
-    // Dispatch the action to add an employee
-    dispatch(addEmployee(formDataWithSerializedDates));
+  // Define a type for Employee with string dates
+type EmployeeWithStringDates = {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string | null;
+  startDate: string | null;
+  street: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  department: string;
+};
+
+// Convert dateOfBirth and startDate to "YYYY-MM-DD" format
+const formDataWithSerializedDates: EmployeeWithStringDates = {
+  ...formData,
+  dateOfBirth: formData.dateOfBirth
+    ? formData.dateOfBirth.toISOString().split('T')[0]
+    : null,
+  startDate: formData.startDate
+    ? formData.startDate.toISOString().split('T')[0]
+    : null,
+};
+
+// Create a new object by omitting null values
+const formDataWithoutNulls: Employee = {
+  ...formDataWithSerializedDates,
+  dateOfBirth: formDataWithSerializedDates.dateOfBirth || '',
+  startDate: formDataWithSerializedDates.startDate || '',
+};
+
+// Dispatch the action to add an employee
+dispatch(addEmployee(formDataWithoutNulls));
     // Open the modal
     openModal();
   };
@@ -208,22 +225,24 @@ const CreateEmployee = () => {
 
           <label htmlFor="dateOfBirth">Date of Birth</label>
           <DatePicker
+            id="dateOfBirth"
             selectedDate={formData.dateOfBirth}
             onChange={(date) =>
               setFormData({ ...formData, dateOfBirth: date })
             }
-            onFormInputChange={(fieldName, value) =>
-              setFormData({ ...formData, dateOfBirth: value })
+            onFormInputChange={(fieldName: string, value: string) =>
+              setFormData({ ...formData, [fieldName]: value })
             }
           />
           <label htmlFor="startDate">Start Date</label>
           <DatePicker
+            id="startDate"
             selectedDate={formData.startDate}
             onChange={(date) =>
               setFormData({ ...formData, startDate: date })
             }
-            onFormInputChange={(fieldName, value) =>
-              setFormData({ ...formData, startDate: value })
+            onFormInputChange={(fieldName: string, value: string) =>
+              setFormData({ ...formData, [fieldName]: value })
             }
           />
           {inputErrors.startDate && (
@@ -236,7 +255,7 @@ const CreateEmployee = () => {
                 value: department,
                 label: department,
               }))}
-              onChange={handleDepartmentChange}
+              onChange={(selectedOption) => handleDepartmentChange(selectedOption as { value: string; label: string })}
               value={{ value: formData.department, label: formData.department }}
             />
             {inputErrors.department && (
@@ -278,8 +297,16 @@ const CreateEmployee = () => {
                 value: state.name,
                 label: state.name,
               }))}
-              onChange={handleStateChange} 
-              value={{ value: formData.state, label: formData.state }}
+              onChange={(selectedValue) =>
+                setFormData({
+                  ...formData,
+                  state: selectedValue ? String(selectedValue.value) : '',
+                })
+              }
+              value={{
+                value: formData.state,
+                label: formData.state,
+              }}
             />
             <label htmlFor="zipCode">Zip Code</label>
             <input

@@ -1,23 +1,35 @@
 import React, { useState, useMemo } from 'react';
-import { useTable, usePagination, useSortBy } from 'react-table';
-import { NavLink } from 'react-router-dom';
+import { useTable, usePagination, useSortBy, TableInstance, UsePaginationInstanceProps, Column } from 'react-table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
-import { store } from '../redux/store.js';
+import { RootState } from '../redux/store';
+import { Employee } from '../redux/employeesSlice';
 import { useSelector } from 'react-redux';
-import "../styles/EmployeeList.scss";
+import '../styles/EmployeeList.scss';
+import 'react-table';
+
+interface CustomTableState {
+    pageIndex: number;
+}
 
 const EmployeeList = () => {
-    //access the store
-    const employees = useSelector(state => state.employees.employees);
+    const employees = useSelector((state: RootState) => state.employees.employees);
 
+    // Step 1: Create a state variable for search input
     const [pageSize, setPageSize] = useState(10);
     const [searchInput, setSearchInput] = useState('');
+
+    // Step 2: Add an input for search
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // Step 3: Update the search input state
+        setSearchInput(e.target.value);
+    };
 
     const filteredEmployees = useMemo(() => {
         if (!searchInput) return employees;
 
-        return employees.filter(employee => {
+        return employees.filter((employee) => {
+            // Implement your search logic here
             const fullName = `${employee.firstName} ${employee.lastName}`.toLowerCase();
             const searchLower = searchInput.toLowerCase();
             return (
@@ -32,7 +44,7 @@ const EmployeeList = () => {
         });
     }, [searchInput, employees]);
 
-    const columns = React.useMemo(
+    const columns: Column<Employee>[] = useMemo(
         () => [
             { accessor: 'firstName', Header: 'First Name' },
             { accessor: 'lastName', Header: 'Last Name' },
@@ -47,29 +59,33 @@ const EmployeeList = () => {
         []
     );
 
+    const tableInstance = useTable(
+        {
+            columns,
+            data: filteredEmployees,
+        },
+        useSortBy,
+        usePagination
+    ) as TableInstance<Employee> & UsePaginationInstanceProps<Employee>;
+
     const {
         getTableProps,
         getTableBodyProps,
         headerGroups,
-        page,
         prepareRow,
+        page,
         canPreviousPage,
         canNextPage,
         nextPage,
         previousPage,
         setPageSize: setPageSizeReactTable,
-        state: { pageIndex },
-    } = useTable(
-        { columns, data: filteredEmployees, initialState: { pageIndex: 0, pageSize } },
-        useSortBy,
-        usePagination
-    );
+        state,
+    } = tableInstance;
 
-    const handleSearchChange = (e) => {
-        setSearchInput(e.target.value);
-    };
+    const customState = state as CustomTableState;
+    const pageIndex = customState.pageIndex;
 
-    const handlePageSizeChange = (event) => {
+    const handlePageSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const newSize = Number(event.target.value);
         setPageSize(newSize);
         setPageSizeReactTable(newSize);
@@ -83,84 +99,71 @@ const EmployeeList = () => {
         <div className="tablePage">
             <h2>Current Employees</h2>
 
+            {/* Step 2: Add an input for search */}
+            <div className="search-bar">
+                <input
+                    type="text"
+                    placeholder="Search employees..."
+                    value={searchInput}
+                    onChange={handleSearchChange}
+                />
+            </div>
+
             <div className="tableWithLegend">
-                <div className="tableFeatures">
-                    <div className="showButton">
-                        <label htmlFor="pageSize">Show</label>
-                        <select id="pageSize" value={pageSize} onChange={handlePageSizeChange}>
-                            {[10, 25, 50, 100].map(size => (
-                                <option key={size} value={size}>{size}</option>
-                            ))}
-                        </select>
-                        <label> entries</label>
-                    </div>
-                    <div className="searchBar">
-                        <label htmlFor="searchInput">Search:</label>
-                        <input
-                            type="text"
-                            id="searchInput"
-                            value={searchInput}
-                            onChange={handleSearchChange}
-                        />
-                    </div>
-                </div>
                 <table {...getTableProps()}>
                     <thead>
-                        {headerGroups.map(headerGroup => (
-                        <tr {...headerGroup.getHeaderGroupProps()}>
-                        {headerGroup.headers.map(column => (
-                            <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                <div className="header-content">
-                                    {column.render('Header')}
-                                    <div className="arrows">
-                                        <span className={column.isSorted && !column.isSortedDesc ? "sorted-asc" : ""}>
-                                            <FontAwesomeIcon icon={faCaretUp} />
-                                        </span>
-                                        <span className={column.isSorted && column.isSortedDesc ? "sorted-desc" : ""}>
-                                            <FontAwesomeIcon icon={faCaretDown} />
-                                        </span>
-                                    </div>
-                                </div>
-                            </th>
-                        ))}
-                    </tr>
+                        {headerGroups.map((headerGroup) => (
+                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map((column) => (
+                                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                        <div className="header-content">
+                                            {column.render('Header')}
+                                            <div className="arrows">
+                                                {column.isSorted ? (
+                                                    column.isSortedDesc ? (
+                                                        <FontAwesomeIcon icon={faCaretDown} />
+                                                    ) : (
+                                                        <FontAwesomeIcon icon={faCaretUp} />
+                                                    )
+                                                ) : null}
+                                            </div>
+                                        </div>
+                                    </th>
+                                ))}
+                            </tr>
                         ))}
                     </thead>
                     <tbody {...getTableBodyProps()}>
-                        {page.length === 0 ? (
-                            <tr>
-                                <td colSpan={columns.length}>No data available in table</td>
-                            </tr>
-                        ) : (
-                            page.map(row => {
-                                prepareRow(row);
-                                return (
-                                    <tr {...row.getRowProps()}>
-                                        {row.cells.map(cell => (
-                                            <td {...cell.getCellProps()}>
-                                                {cell.render('Cell')}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                );
-                            })
-                        )}
+                        {page.map((row) => {
+                            prepareRow(row);
+                            return (
+                                <tr {...row.getRowProps()}>
+                                    {row.cells.map((cell) => (
+                                        <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                    ))}
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
+
                 <div className="pagination">
-                    <div className="entriesInfo">
-                        <span>
-                            Showing {total > 0 ? from : 0} to {to} of {total} entries
-                        </span>
-                    </div>
-                    <div className="paginationNav">
-                        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-                            Previous
-                        </button>
-                        <button onClick={() => nextPage()} disabled={!canNextPage}>
-                            Next
-                        </button>
-                    </div>
+                    <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+                        Previous
+                    </button>
+                    <button onClick={() => nextPage()} disabled={!canNextPage}>
+                        Next
+                    </button>
+                    <span>
+                        Showing {from} to {to} of {total} entries
+                    </span>
+                    <select value={pageSize} onChange={handlePageSizeChange}>
+                        {[10, 20, 30, 40, 50].map((size) => (
+                            <option key={size} value={size}>
+                                Show {size}
+                            </option>
+                        ))}
+                    </select>
                 </div>
             </div>
         </div>

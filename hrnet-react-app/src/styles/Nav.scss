@@ -6,6 +6,10 @@ nav{
     align-items: center;
     margin: auto;
 
+    a:visited{
+        color: black;
+    }
+
     .logo{
         display: flex;
         flex-direction: row;

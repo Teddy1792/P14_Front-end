@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink,useLocation } from 'react-router-dom';
 import icon from '../assets/logo.png';
 import '../styles/Nav.scss';
