@@ -4,10 +4,11 @@ import useDocumentTitle from './useDocumentTitle.js';
 import states from '../assets/states.json';
 import departments from '../assets/departments.json';
 import CustomSelect from './CustomSelect.js';
-import DatePicker from './DatePicker.jsx';
+import { DatePicker } from 'datepickerfromscratch';
 import { useDispatch } from 'react-redux';
 import { addEmployee } from '../redux/employeesSlice';
 import { Employee } from '../redux/employeesSlice';
+import 'datepickerfromscratch/style.css';
 import '../styles/CreateEmployee.scss';
 
 interface EmployeeFormData {
@@ -23,9 +24,6 @@ interface EmployeeFormData {
 }
 
 const CreateEmployee = () => {
-  // Set the document title
-  useDocumentTitle('HRnet');
-  
   const dispatch = useDispatch();
 
   // Form state for employee data

@@ -1,0 +1,3 @@
+Lien GitHub du projet 14: https://github.com/Teddy1792/P14_Front-end
+Lien GitHub du plugin jQuery converti en React: https://github.com/Teddy1792/DatePicker
+Lien NPM du plugin jQuery converti en React: https://www.npmjs.com/package/datepickerfromscratch
