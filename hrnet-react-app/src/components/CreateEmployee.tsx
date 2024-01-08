@@ -1,13 +1,12 @@
 import { useState, useEffect, ChangeEvent, FormEvent, FocusEvent } from 'react';
 import ModalComponent from './ModalComponent.jsx';
-import useDocumentTitle from './useDocumentTitle.js';
 import states from '../assets/states.json';
 import departments from '../assets/departments.json';
 import CustomSelect from './CustomSelect.js';
-import { DatePicker } from 'datepickerfromscratch';
 import { useDispatch } from 'react-redux';
 import { addEmployee } from '../redux/employeesSlice';
 import { Employee } from '../redux/employeesSlice';
+import { DatePicker } from 'datepickerfromscratch';
 import 'datepickerfromscratch/style.css';
 import '../styles/CreateEmployee.scss';
 
@@ -110,7 +109,7 @@ const CreateEmployee = () => {
       default:
         break;
     }
-  
+
     setInputErrors((prevErrors) => ({
       ...prevErrors,
       [id]: error,
@@ -225,7 +224,7 @@ dispatch(addEmployee(formDataWithoutNulls));
           <DatePicker
             id="dateOfBirth"
             selectedDate={formData.dateOfBirth}
-            onChange={(date) =>
+            onChange={(date: Date | null) =>
               setFormData({ ...formData, dateOfBirth: date })
             }
             onFormInputChange={(fieldName: string, value: string) =>
@@ -236,7 +235,7 @@ dispatch(addEmployee(formDataWithoutNulls));
           <DatePicker
             id="startDate"
             selectedDate={formData.startDate}
-            onChange={(date) =>
+            onChange={(date: Date | null) =>
               setFormData({ ...formData, startDate: date })
             }
             onFormInputChange={(fieldName: string, value: string) =>

@@ -1,9 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
-    "paths": {
-      "*": ["types/*"]
-    },
     "allowSyntheticDefaultImports": true,
     "target": "ES2020",
     "useDefineForClassFields": true,
@@ -14,7 +10,6 @@
 
     /* Bundler mode */
     "moduleResolution": "node",
-    "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
